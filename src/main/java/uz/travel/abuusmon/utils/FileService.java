@@ -23,6 +23,9 @@ public class FileService {
 
     public String uploadFile(MultipartFile file) {
         try {
+
+            checkAndCreateDirectory();
+
             String uniqueFileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
             String filePath = uploadPath + File.separator + uniqueFileName;
 
@@ -54,4 +57,13 @@ public class FileService {
         }
     }
 
+
+    private void checkAndCreateDirectory() {
+        File directory = new File(uploadPath);
+        if (!directory.exists()) {
+            if (!directory.mkdirs()) {
+                throw new RuntimeException("Could not create upload directory: " + uploadPath);
+            }
+        }
+    }
 }
